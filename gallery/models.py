@@ -14,6 +14,7 @@ class User(models.Model):
         self.save()
 
 
+
     class Meta:
         ordering = ['first_name']
         
@@ -23,15 +24,6 @@ class Location(models.Model):
     def __str__(self):
         return self.name
 
-    @classmethod
-    def get_locations(cls):
-        locations = Location.objects.all()
-        return locations
-
-
-    @classmethod
-    def update_location(cls, id, value):
-        cls.objects.filter(id=id).update(image=value)
 
     def save_location(self):
         self.save()
@@ -39,18 +31,34 @@ class Location(models.Model):
     def delete_location(self):
         self.delete()
 
+    @classmethod
+    def get_locations(cls):
+        locations = Location.objects.all()
+        return locations
+
+    
+
 class Category(models.Model):
     name=models.CharField(max_length=200)
-    
-    
-    # @classmethod
-    # def search_by_title(cls,search_term):
-    #     photos = cls.objects.filter(title__icontains=search_term)
-    #     return photos
-
 
     def __str__(self):
         return self.name
+
+    def save_category(self):
+        self.save()
+
+    def delete_category(self):
+        self.delete()
+
+    
+    
+    # @classmethod
+    # def search_by_name(cls,search_term):
+    #     photos = cls.objects.filter(name__icontains=search_term)
+    #     return photos
+
+
+   
 
 class Photo(models.Model):
     title=models.CharField(max_length=50)
@@ -65,25 +73,26 @@ class Photo(models.Model):
     def __str__(self):
         return self.title
 
-    def save_project(self):
+    def save_photo(self):
         self.save()
 
 
-    def delete_project(self):
+    def delete_photo(self):
         self.delete()
 
     @classmethod
-    def search_by_title(cls,search_term):
-        photos = cls.objects.filter(title__icontains=search_term)
-        return photos
-
+    def update_photo(cls, id, value):
+        cls.objects.filter(id=id).update(photo_image=value)
 
     @classmethod
-    def search(cls,search_term):
-        photos = cls.objects.filter(
-            title__icontains=search_term, 
-            description__icontains=search_term,
-            user__first_name__icontains=search_term)
-        return photos
+    def filter_by_location(cls, location):
+        photo_location = Photo.objects.filter(location__name=location).all()
+        return photo_location
+
+    @classmethod
+    def filter_by_category(cls, category):
+        photo_category = Photo.objects.filter(category__name=category).all()
+        return photo_category
 
 
+    

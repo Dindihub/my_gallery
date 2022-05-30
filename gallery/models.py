@@ -17,6 +17,40 @@ class User(models.Model):
     class Meta:
         ordering = ['first_name']
         
+class Location(models.Model):
+    name = models.CharField(max_length=60)
+
+    def __str__(self):
+        return self.name
+
+    @classmethod
+    def get_locations(cls):
+        locations = Location.objects.all()
+        return locations
+
+
+    @classmethod
+    def update_location(cls, id, value):
+        cls.objects.filter(id=id).update(image=value)
+
+    def save_location(self):
+        self.save()
+
+    def delete_location(self):
+        self.delete()
+
+class Category(models.Model):
+    name=models.CharField(max_length=200)
+    
+    
+    # @classmethod
+    # def search_by_title(cls,search_term):
+    #     photos = cls.objects.filter(title__icontains=search_term)
+    #     return photos
+
+
+    def __str__(self):
+        return self.name
 
 class Photo(models.Model):
     title=models.CharField(max_length=50)
@@ -25,9 +59,8 @@ class Photo(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
     photo_url=models.CharField(max_length=200)
     photo_image = models.ImageField(upload_to = 'photo/',blank=True)
-    category = models.ManyToManyField('category')
-    location = models.CharField(max_length=100,blank=True)
-
+    category = models.ForeignKey(Category,on_delete=models.CASCADE,blank=True,null=True)
+    location = models.ForeignKey(Location,on_delete=models.CASCADE,blank=True,null=True)
 
     def __str__(self):
         return self.title
@@ -36,12 +69,21 @@ class Photo(models.Model):
         self.save()
 
 
-
     def delete_project(self):
         self.delete()
 
-class Category(models.Model):
-    name=models.CharField(max_length=200)
+    @classmethod
+    def search_by_title(cls,search_term):
+        photos = cls.objects.filter(title__icontains=search_term)
+        return photos
 
-    def __str__(self):
-        return self.name
+
+    @classmethod
+    def search(cls,search_term):
+        photos = cls.objects.filter(
+            title__icontains=search_term, 
+            description__icontains=search_term,
+            user__first_name__icontains=search_term)
+        return photos
+
+

@@ -9,6 +9,8 @@ django = "*"
 django-bootstrap4 = "*"
 psycopg2 = "*"
 pillow = "*"
+python-decouple = "*"
+dj-database-url = "*"
 
 [dev-packages]
 

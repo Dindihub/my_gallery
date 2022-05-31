@@ -100,9 +100,17 @@ class PhotoTestClass(TestCase):
         found_photos = self.photo_test.filter_by_location(location='Nairobi')
         self.assertTrue(len(found_photos) == 1)
 
-    def test_search_photo_by_category(self):
+    def test_search_image_by_category(self):
         self.photo_test.save_photo()
-        found_photos = self.photo_test.filter_by_category(category='Travel')
-        self.assertTrue(len(found_photos) == 1)
+        category = 'home'
+        found_photo = self.photo_test.search_by_category(category)
+        self.assertTrue(len(found_photo) > 0)
+
+    # def test_search_photo_by_category(self):
+    #     self.photo_test.save_photo()
+    #     found_photos = self.photo_test.filter_by_category(category='Travel')
+    #     self.assertTrue(len(found_photos) == 1)
+
+    
 
 

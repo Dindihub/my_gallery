@@ -3,8 +3,9 @@ from .models import Photo,Category
 from django.http import Http404
 
 # Create your views here.
-def index(request):
-    return render(request,'index.html')
+def index(request,pk):
+    photo=Photo.objects.get(pk=pk)
+    return render(request,'index.html',{"photos":photo})
 
 def photo(request):
     try:
@@ -14,15 +15,16 @@ def photo(request):
     return render(request,'index.html',{"photos":photo})
 
 
-def photo_search(request):
 
-    if 'photo' in request.GET and request.GET["photo"]:
-        search_term = request.GET.get("photo")
-        searched_photos = Photo.search_by_title(search_term)
-        # searched_category = Category.search_by_title(search_term)
+
+def category_search(request):
+
+    if 'category_search' in request.GET and request.GET["category_search"]:
+        search_term = request.GET.get("category_search")
+        searched_category = Photo.search_by_category(search_term)
         message = f"{search_term}"
 
-        return render(request, 'search.html',{"message":message,"photos": searched_photos})
+        return render(request, 'search.html',{"message":message,"searched_category": searched_category})
 
     else:
         message = "You haven't searched for any term"

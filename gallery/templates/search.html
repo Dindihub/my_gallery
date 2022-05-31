@@ -2,19 +2,12 @@
 {% block content %}
 <div class="container">
 
-  <div class="row">
-    {% if photos%}
-      <h2>Found {{ projects|length }} of searched term {{message}}</h2>
-    {% else %}
-      <h2> Found photos for the search term {{message}}</h2>
-    {% endif %}
-
-  </div>
+  
 
   <div class="row">
 
-  {% if photos %}
-    {% for photo in photos %}
+ 
+    {% for photo in searched_category %}
       <div class="col-sm-6 col-md-3">
           <h3>{{photo.title}}</h3>
            <img src="{{ photo.photo_image.url }}" alt="Image" class="img-fluid">
@@ -26,7 +19,7 @@
 
       </div>
     {% endfor %}
-  {% endif %}
+  
   </div>
 </div>
  {% endblock %}

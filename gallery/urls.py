@@ -6,11 +6,8 @@ from django.conf.urls.static import static
 urlpatterns=[
     path('',views.photo,name='home'),
     path('photo/',views.photo,name='gallery'),
-    path('search/', views.photo_search, name='photo_search'),
-    path('category/', views.photo_search, name='photo_search'),
-
-    
-    
+    path('search/', views.category_search, name='category_search'),
+    # path('category/', views.photo_search, name='photo_search'),
 
     # path ('search/<int:projectid>/',views.project_search,name ='projects')
 

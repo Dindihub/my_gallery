@@ -8,13 +8,13 @@
   data-parallax="scroll"
   data-image-src="../static/photos/"
 >
-  <form class="d-flex tm-search-form" action="{% url 'photo_search' %}">
+  <form class="d-flex tm-search-form col-sm-6" action="{% url 'category_search' %}">
     <input
       class="form-control tm-search-input"
       type="search"
-      placeholder="Search for photos"
+      placeholder="Search for photos by category Travel,portrait,animals e.t.c"
       aria-label="Search"
-      name="photo"
+      name="category_search"
       
     />
     <button class="btn btn-danger  tm-search-btn" type="submit">
@@ -26,23 +26,23 @@
 
 <div class="container-fluid tm-container-content tm-mt-60">
   <div class="row mb-4">
-    <h2 class="col-6 tm-text-primary">Welcome to Picha Gallery</h2>
+    <h2 class="col-12 tm-text-primary text-center" style="color:red">Welcome to Picha Gallery</h2>
+    <h4 class="col-12 tm-text-primary text-center" style="color:green"><i>Your home of pictures!</i> </h4>
     <div class="col-6 d-flex justify-content-end align-items-center">
-      <form action="" class="tm-text-primary">
-        Page
-        <input type="text" value="1" size="1" class="tm-input-paging tm-text-primary" />
-       
-      </form>
     </div>
   </div>
 
- <div class="row tm-mb-90 tm-gallery">
+ <div class="row tm-mb-90 tm-gallery" id="gallery">
     {%  for photo in photos %}
     <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-12 mb-5">
       <figure class="effect-ming tm-video-item">
         {% if photo.photo_image %}
-        <img src="{{ photo.photo_image.url }}" alt="Image" class="img-fluid">
+
+        <img src="{{ photo.photo_image.url }}" alt="Image" class="img-fluid" data-bs-toggle="modal" data-bs-target="#imagemodal" data-img_title="{{photo.title}}" data-img_src="{{photo.photo_image.url}}" data-img_description="{{photo.description}}" data-img_location="{{photo.location}}" data-img_category="{{photo.category}}" data-img_pubdate="{{photo.date_posted}}">
          {% endif %}
+         
+                   
+                </a>
         <figcaption class="d-flex align-items-center justify-content-center">
           <!-- <h5>{{photo.title }}</h5> -->
         </figcaption>
@@ -54,10 +54,107 @@
       </div>
     </div>
     {% endfor%}
+    <div class="modal fade" id="imagemodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <img src="" width="100%" id="modalimage" alt="">
+        <div>
+          <div id="imagedetails">
+            
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+       
+      </div>
+    </div>
   </div>
+</div>
+  </div>
+
+  <script>
+  let imageModal = document.getElementById('imagemodal')
+  function detail(detail){
+    const row=`
+    <div class="row my-2">
+      <div class="col-4">
+        <p>${detail.title}</p>
+      </div>
+      <div class="col-8">
+        <p>${detail.value}</p>
+      </div>
+    </div>
+    `
+    return row
+  }
+  function imageDetails(details,name){
+    let imagedetails=` `
+    for(let i=0;i<details.length;i++){
+      imagedetails+=detail(details[i])
+    }
+    return imagedetails
+    // +`<button class="btn btn-primary" onclick="copyToClipboard(${name})">Copy Link</button>`
+
+  }
+    imageModal.addEventListener('show.bs.modal', function (event) {
+   
+    let img = event.relatedTarget
     
- 
+    let photo_title = img.getAttribute('data-img_title')
+    let photo_src = img.getAttribute('data-img_src')
+    let photo_desc= img.getAttribute('data-img_description')
+    let photo_location = img.getAttribute('data-img_location')
+    let photo_category = img.getAttribute('data-img_category')
+    let photo_pubdate = img.getAttribute('data-img_pubdate')
 
+    const img_details=[
+      {
+        title:"title",
+        value:photo_title
+      },
+      {
+        title:"Description",
+        value:photo_desc
+      },
+  
+      {
+        title:"Location",
+        value:photo_location
+      },
+      {
+        title:"Category",
+        value:photo_category
+      },
+      {
+        title:"Published at",
+        value:photo_pubdate
+      },
+    
+    ]
+   
+    let modalTitle = imageModal.querySelector('.modal-title')
+    let modalimage=imageModal.querySelector('#modalimage')
+    let modaldetails=imageModal.querySelector('#imagedetails')
 
-
+    modalTitle.textContent = photo_title
+    modalimage.src=photo_src
+    const url=window.location.host+window.location.protocol+"//"+photo_src
+    modaldetails.innerHTML=imageDetails(img_details,"url")
+  })
+  // const copyToClipboard = (valuetocopy) => {
+  //   const textarea = document.createElement('textarea')
+  //   textarea.value = valuetocopy;
+  //   document.body.appendChild(textarea)
+  //   textarea.select()
+  //   document.execCommand('copy')
+  //   document.body.removeChild(textarea)
+    
+  // }
+</script>
 {% endblock %}

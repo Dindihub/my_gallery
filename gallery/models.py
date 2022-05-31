@@ -51,7 +51,6 @@ class Category(models.Model):
         self.delete()
 
     
-    
     # @classmethod
     # def search_by_name(cls,search_term):
     #     photos = cls.objects.filter(name__icontains=search_term)
@@ -90,9 +89,20 @@ class Photo(models.Model):
         return photo_location
 
     @classmethod
-    def filter_by_category(cls, category):
-        photo_category = Photo.objects.filter(category__name=category).all()
-        return photo_category
+    def search_by_category(cls, search_term):
+        photos = cls.objects.filter(category__name__icontains=search_term)
+        return photos
+
+    # @classmethod
+    # def filter_by_category(cls, category):
+    #     photo_category = Photo.objects.filter(category__name=category).all()
+    #     return photo_category
+
+    # @classmethod
+    # def search_by_title(cls,search_term):
+    #     photos = cls.objects.filter(title__icontains=search_term)
+    #     return photos
+
 
 
     
